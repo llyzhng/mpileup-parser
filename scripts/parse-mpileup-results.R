@@ -50,12 +50,12 @@ addSNVMpileupParsed <- function(snv_mpileup, sample_out) {
 
 # ===================================================================================== #
 
-all_muts <- read.delim(opt$all_muts) %>%
-  tibble()
+all_muts <- read.delim(opt$all_muts, stringsAsFactors = F)
 
 sample_out <- all_muts %>%
-  bind_cols(., tibble(total_reads = NA,
-                      variant_reads = NA))
+  as_tibble() %>%
+  mutate(total_reads = NA,
+         variant_reads = NA)
 
 snv_mpileup <- read.delim(opt$snv,
                           stringsAsFactors = F,
