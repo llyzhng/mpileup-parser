@@ -62,11 +62,19 @@ pileup_sub <- snv_mpileup[inds, ]
 sample_out$total_reads <- pileup_sub$cov
 alt.col.ind <- sapply(sample_out$ALT, pickCol)
 
+
 alt.count <- mcmapply(function(i,j) pileup_sub[i,j],
                       i = 1:nrow(sample_out),
                       j = alt.col.ind,
                       mc.cores = opt$cores)
+
+ref.col.ind <- sapply(sample_out$REF, pickCol)
+ref.count <- mcmapply(function(i,j) pileup_sub[i,j],
+                      i = 1:nrow(sample_out),
+                      j = ref.col.ind,
+                      mc.cores = opt$cores)
 sample_out$variant_reads <- alt.count
+sample_out$ref_reads <- ref.count
 
 write.table(sample_out, opt$outfile, 
             quote = F, sep = "\t", row.names = F, col.names = T)
